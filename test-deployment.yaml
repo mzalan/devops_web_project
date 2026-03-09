@@ -1,0 +1,21 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: cicd-test-0309-deployment
+
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels: 
+#       app: cicd-test-0309
+  
+#   template: 
+#     metadata:
+#       labels: 
+#         app: cicd-test-0309
+#     spec:
+#       containers: 
+#         - name: cicd-test-0309-container
+#           image: ghcr.io/marquetantzalan/cicd-k8s-13a
+
+
