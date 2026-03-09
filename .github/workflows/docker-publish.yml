@@ -22,8 +22,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Checkout repository
       run: | 
-        docker build . --file Dockerfile  --tag ghcr.io/mzalan/cicd-k8s-13a-test-cicd-13ab:$IMAGE_TAG
-        docker login ghcr.io -u mzalan -p ${{ secrets.GHCR_TOKEN }}
-        docker push ghcr.io/mzalan/test-cicd-13ab:$IMAGE_TAG
+        docker build . --file Dockerfile  --tag ghcr.io/marquetant-zalan/cicd-k8s-13a-test-cicd-13ab:$IMAGE_TAG
+        docker login ghcr.io -u marquetant-zalan -p ${{ secrets.GHCR_TOKEN }}
+        docker push ghcr.io/marquetant-zalan/test-cicd-13ab:$IMAGE_TAG
     
 

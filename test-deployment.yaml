@@ -1,21 +1,41 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: cicd-test-0309-deployment
+# kubectl create secret docker-registry ghcr-auth-secret --docker-server=ghcr.io --docker-username=marquetant-zalan --docker-password=<TOKEN>
 
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels: 
-#       app: cicd-test-0309
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-test-0309-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: cicd-test-0309
   
-#   template: 
-#     metadata:
-#       labels: 
-#         app: cicd-test-0309
-#     spec:
-#       containers: 
-#         - name: cicd-test-0309-container
-#           image: ghcr.io/marquetantzalan/cicd-k8s-13a
+  template: 
+    metadata:
+      labels: 
+        app: cicd-test-0309
+    spec:
+      containers: 
+        - name: cicd-test-0309-container
+          image: ghcr.io/marquetant-zalan/cicd-k8s-13a
+      imagePullSecrets:
+        - name: ghcr-auth-secret
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cicd-test-0309-cluster-ip-service
+spec:
+  selector:
+    app: cicd-0309
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      targetPort: 3306
+      port: 3306
+      
+--- 
 
