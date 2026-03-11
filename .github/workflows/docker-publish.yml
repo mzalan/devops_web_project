@@ -32,11 +32,19 @@ jobs:
         git commit -m "update K8S deployment file"
         git push
 
-#TODO: kubclt apply 
-#      config-nak secretbe másolása
-#      "vissza" kellen push-olni a módosított yaml fájlt        
-        
+        mkdir -p ~/.kube
+        echo "${{ secrets.JEDLIK_K8S_CONFIG }}" | base64 -d > ~/.kube/config
+        kubectl apply -f ./test-deployment.yaml
 
+
+#config fájl base64-be kódolása
+# $bytes = [System.IO.File]::ReadAllBytes("$env:USERPROFILE/.kube/config")
+# [System.Convert]::ToBase64String($bytes) 
+        
+# -> elmentettük egy JEDLIK_K8S_CONFIG secretbe
 
     
+
+#TODO: kubclt apply 
+#      config-nak secretbe másolása
 
