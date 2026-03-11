@@ -1,28 +1,30 @@
-# kubectl create secret docker-registry ghcr-auth-secret --docker-server=ghcr.io --docker-username=marquetant-zalan --docker-password=<TOKEN>
+# kubectl create secret docker-registry ghcr-auth-secret --docker-server=ghcr.io --docker-username=mzalan --docker-password=<TOKEN>
 
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+metadata: 
   name: cicd-test-0309-deployment
 
 spec:
   replicas: 1
   selector:
-    matchLabels: 
+    matchLabels:
       app: cicd-test-0309
-  
-  template: 
+
+  template:
     metadata:
-      labels: 
+      labels:
         app: cicd-test-0309
     spec:
-      containers: 
+      containers:
         - name: cicd-test-0309-container
-          image: ghcr.io/marquetant-zalan/cicd-k8s-13a
+          image: ghcr.io/mzalan/cicd-k8s-13ab:1773058604
+          ports:
+            - containerPort: 80
       imagePullSecrets:
         - name: ghcr-auth-secret
 
----
+--- 
 
 apiVersion: v1
 kind: Service
@@ -30,12 +32,33 @@ metadata:
   name: cicd-test-0309-cluster-ip-service
 spec:
   selector:
-    app: cicd-0309
+    app: cicd-test-0309
   type: ClusterIP
   ports:
     - protocol: TCP
-      targetPort: 3306
-      port: 3306
-      
---- 
+      targetPort: 80
+      port: 80        
 
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: cicd-test-0309-ingress
+    annotations:
+      #nginx.ingress.kubernetes.io/whitelist-source-range: 10.0.13.39/32
+    
+spec:
+    ingressClassName: nginx
+    
+    rules:
+       - host: mzalan-cicd-test.jcloud.jedlik.cloud
+         http:
+           paths:
+             - path: /
+               pathType: Prefix
+               backend:
+                 service:
+                   name: cicd-test-0309-cluster-ip-service
+                   port:
+                     number: 80      
